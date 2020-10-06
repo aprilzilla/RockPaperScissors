@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Rock Paper Scissors Game">
+    <title>Roshambo</title>
+    <!--
+        Rock Paper Scissors Game
+        The Odin Project
+        By: Aprilzilla
+        Date: 10/6/2020
+    -->
+</head>
+<body>
+    <script>
+        let computerSelection = computerPlay();
+        let score = 0;
+        let compScore = 0;
+
+        game(); //run RPS round 5 times, declares winner
+
+        //function determines computer's turn, randomly selects a play each time it's called
+        function computerPlay() {
+            switch (Math.floor(Math.random() * 3)) {
+                case 0: return "rock"
+                case 1: return "scissors" 
+                case 2: return "paper" 
+            }
+        }
+        //compares each possible outcome for both user and computer, then returns a statement
+        function playRound(playerSelection, computerSelection) {
+            switch (playerSelection) {
+                case "rock": 
+                    switch (computerSelection) {
+                        case "rock": return "It's a tie, rock = rock."; //no score adjustment for tie
+                            break;
+                        case "paper": compScore+= 1;  //adds 1 to computer score
+                            return "You lose, paper beats rock.";
+                            break;       
+                        case "scissors": score+= 1; //adds 1 to user score
+                            return "You win, rock beats scissors!";
+                    }
+                case "paper":
+                    switch (computerSelection) {
+                        case "paper": return "It's a tie, paper = paper.";
+                            break;
+                        case "scissors": compScore+= 1;
+                            return "You lose, scissors beats paper.";
+                            break;
+                        case "rock": score+= 1;
+                            return "You win, paper beats rock!";
+                    }
+                case "scissors":
+                    switch (computerSelection) {
+                        case "scissors": return "It's a tie, scissors = scissors.";
+                            break;
+                        case "rock": compScore+= 1;
+                            return "You lose, rock beats scissors.";
+                            break;
+                        case "paper": score+= 1;
+                            return "You win, scissors beats paper!";
+                    }
+            }
+        }
+
+        function game() {
+            //plays 5 rounds of RPS with a for loop
+            for (let round = 1; round < 6; round++){
+
+                //user input to select their choice
+                let playerSelection = prompt("Choose your weapon: rock, paper, scissors").toLowerCase();
+
+                //logs each round's outcome, the round, score, and selected options for user and computer
+                console.log(playRound(playerSelection, computerSelection));
+                console.log(
+                `       Round ${round}: 
+                Player1: ${playerSelection} --- Computer: ${computerSelection}.
+                The score is ${score} to ${compScore}.`);
+            }
+
+            //after 5 rounds, this tests who has the most points and logs a winner
+            if (score > compScore) {
+                console.log(
+                `Congrats! You beat the computer.
+                Your final score was ${score}, computer scored ${compScore}`);
+            } else if (score === compScore) {
+                console.log(
+                    `Boo!! It's a dumb tie. Play the game again.
+                Your final score was ${score}, computer scored ${compScore}`);
+            } else if (score < compScore) {
+                console.log(
+                    `You lost, sucker!
+                Your final score was ${score}, computer scored ${compScore}`);
+            }
+        }
+    </script>
+</body>
+</html>
