@@ -10,89 +10,229 @@
         By: Aprilzilla
         Date: 10/6/2020
     -->
+    <style>
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            margin: 20px auto 40px auto;
+            width: 550px;
+            border: 3px solid black;
+            box-sizing: border-box;
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .fto5 {
+            margin-top: -15px;
+        }
+        .header {
+            grid-area: 1 / 1 / 2 / 3;
+            background-color: rgb(247, 223, 195);
+        }
+        .player {
+            grid-area: 2 / 1 / 3 / 2;
+            background-color: rgb(252, 214, 134);
+        }
+        .computer {
+            grid-area: 2 / 2 / 3 / 3;
+            background-color: rgb(248, 153, 201);
+        }
+        .player,
+        .computer {
+            width: 100%;
+            padding-bottom: 15px;
+        }
+        .result {
+            background-color: rgb(128, 41, 41);
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            margin-top: 0;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        .final{
+            background-color: yellow;
+            font-size: 30px;
+        }
+        .score {
+            grid-area: 3 / 1 / 4 / 3;
+            background-color: rgb(247, 223, 195);
+        }
+        .playerScore,
+        .computerScore {
+            background-color: yellow;
+            font-size: 25px;
+        }
+    </style>
 </head>
 <body>
+<main>
+    <div class="header">
+        <h1>Rock, Paper, Scissors!</h1>
+        <p class="fto5">First to 5 wins</p>
+    </div>
+    <div class="player">
+        <h3>Choose your weapon:</h3>
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <div class="computer">
+        <h3>Computer Played:</h3>
+        <p><span class="comp"></span></p>
+    </div>
+    <div class="score">
+        <p class="result"></p>
+        <p class="final"></p>
+        <p class="reset"></p>
+        <h4>Current Score:</h4>
+        <p><span class="playerScore"></span>  You vs <span class="computerScore"></span> Computer</p>
+    </div>
+</main>
     <script>
-        let computerSelection = computerPlay();
+        let computerSelection = '';
         let score = 0;
         let compScore = 0;
+        let playerSelection = '';
 
-        game(); //run RPS round 5 times, declares winner
+        const rock = document.querySelector('#rock');
+        const paper = document.querySelector('#paper');
+        const scissors = document.querySelector('#scissors');
+
+        const comp = document.querySelector('.comp');
+        const result = document.querySelector('.result');
+        const final = document.querySelector('.final');
+        const playerScore = document.querySelector('.playerScore');
+        const computerScore = document.querySelector('.computerScore');
+        const reset = document.querySelector('.reset');
+
+        playerScore.textContent = score;
+        computerScore.textContent = compScore;
+        
+        rock.addEventListener('click', () => {
+            playerSelection = "rock";
+            computerSelection = computerPlay();
+            console.log(playerSelection, computerSelection);
+            playRound(playerSelection, computerSelection);
+            comp.textContent = computerSelection;
+        });
+        paper.addEventListener('click', () => {
+            playerSelection = "paper";
+            computerSelection = computerPlay();
+            console.log(playerSelection, computerSelection);
+            playRound(playerSelection, computerSelection);
+            comp.textContent = computerSelection;
+        });
+        scissors.addEventListener('click', () => {
+            playerSelection = "scissors";
+            computerSelection = computerPlay();
+            console.log(playerSelection, computerSelection);
+            playRound(playerSelection, computerSelection);
+            comp.textContent = computerSelection;
+        });
 
         //function determines computer's turn, randomly selects a play each time it's called
         function computerPlay() {
             switch (Math.floor(Math.random() * 3)) {
-                case 0: return "rock"
-                case 1: return "scissors" 
-                case 2: return "paper" 
+                 case 0: 
+                    return "rock";
+                case 1: 
+                    return "paper";
+                case 2: 
+                    return "scissors";
             }
         }
+
+        function finalResult() {
+            if (score === 5) {
+                final.textContent = "You won! Congratulations!";
+                reset.innerHTML = '<button onClick="resetGame()">Reset</button>';
+            } else if (compScore === 5 ) {
+                 final.textContent = "You lost, sucker!!";
+                 reset.innerHTML = '<button onClick="resetGame()">Reset</button>';
+            } else {
+                final.textContent = '';
+            }
+        }
+
+        function resetGame() {
+            final.textContent = '';
+            reset.innerHTML = '';
+            result.textContent = '';
+            playerScore.textContent = '0';
+            computerScore.textContent = '0';
+            comp.textContent = '';
+            score = 0;
+            compScore = 0;
+        }
+        
+
         //compares each possible outcome for both user and computer, then returns a statement
         function playRound(playerSelection, computerSelection) {
             switch (playerSelection) {
                 case "rock": 
                     switch (computerSelection) {
-                        case "rock": return "It's a tie, rock = rock."; //no score adjustment for tie
+                        case "rock": 
+                            return result.textContent = "It's a tie, rock = rock.", //no score adjustment for tie
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore;
                             break;
                         case "paper": compScore+= 1;  //adds 1 to computer score
-                            return "You lose, paper beats rock.";
+                            return result.textContent = "You lose, paper beats rock.",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
                             break;       
                         case "scissors": score+= 1; //adds 1 to user score
-                            return "You win, rock beats scissors!";
+                            return result.textContent = "You win, rock beats scissors!",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
                     }
                 case "paper":
                     switch (computerSelection) {
-                        case "paper": return "It's a tie, paper = paper.";
+                        case "paper": 
+                            return result.textContent = "It's a tie, paper = paper.",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore;
                             break;
                         case "scissors": compScore+= 1;
-                            return "You lose, scissors beats paper.";
+                            return result.textContent = "You lose, scissors beats paper.",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
                             break;
                         case "rock": score+= 1;
-                            return "You win, paper beats rock!";
+                            return result.textContent = "You win, paper beats rock!",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
                     }
                 case "scissors":
                     switch (computerSelection) {
-                        case "scissors": return "It's a tie, scissors = scissors.";
+                        case "scissors": 
+                            return result.textContent = "It's a tie, scissors = scissors.",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore;
                             break;
                         case "rock": compScore+= 1;
-                            return "You lose, rock beats scissors.";
+                            return result.textContent = "You lose, rock beats scissors.",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
                             break;
                         case "paper": score+= 1;
-                            return "You win, scissors beats paper!";
+                            return result.textContent = "You win, scissors beats paper!",
+                            playerScore.textContent = score,
+                            computerScore.textContent = compScore,
+                            finalResult();
+                            break;
                     }
             }
         }
 
-        function game() {
-            //plays 5 rounds of RPS with a for loop
-            for (let round = 1; round < 6; round++){
-
-                //user input to select their choice
-                let playerSelection = prompt("Choose your weapon: rock, paper, scissors").toLowerCase();
-
-                //logs each round's outcome, the round, score, and selected options for user and computer
-                console.log(playRound(playerSelection, computerSelection));
-                console.log(
-                `       Round ${round}: 
-                Player1: ${playerSelection} --- Computer: ${computerSelection}.
-                The score is ${score} to ${compScore}.`);
-            }
-
-            //after 5 rounds, this tests who has the most points and logs a winner
-            if (score > compScore) {
-                console.log(
-                `Congrats! You beat the computer.
-                Your final score was ${score}, computer scored ${compScore}`);
-            } else if (score === compScore) {
-                console.log(
-                    `Boo!! It's a dumb tie. Play the game again.
-                Your final score was ${score}, computer scored ${compScore}`);
-            } else if (score < compScore) {
-                console.log(
-                    `You lost, sucker!
-                Your final score was ${score}, computer scored ${compScore}`);
-            }
-        }
+    
     </script>
 </body>
 </html>
