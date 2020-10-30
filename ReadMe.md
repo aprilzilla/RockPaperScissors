@@ -1,5 +1,4 @@
 Create a Roshambo Game
-
 Via the Odin Project
 
 Update 10/30/2020
@@ -7,6 +6,7 @@ Update 10/30/2020
 - Updated game to be played in browser.
 - Now there is a user interface.
 - Live preview available.
+
 
 
 Date: 10/5/2020
